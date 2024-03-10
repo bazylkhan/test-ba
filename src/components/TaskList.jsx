@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import TableComponent from './common/TableComponent';
-import {FormControl, InputLabel, Select, MenuItem, TextField} from '@mui/material';
+import {FormControl, InputLabel, Select, MenuItem, TextField, Button} from '@mui/material';
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import format from 'date-fns/format';
+
 
 
 const TaskList = ({ tasks, employees }) => {
@@ -11,8 +13,10 @@ const TaskList = ({ tasks, employees }) => {
     const [selectedDate, setSelectedDate] = useState(null);
 
     const columns = [
-        { id: 'description', label: 'Описание' },
+        { id: 'description', label: 'Описание', minWidth: 170 },
+        { id: 'date', label: 'Дата', minWidth: 120 },
     ];
+
 
     useEffect(() => {
         const filtered = tasks.filter(task => {
@@ -52,11 +56,21 @@ const TaskList = ({ tasks, employees }) => {
                     renderInput={(params) => <TextField {...params} />}
                 />
             </LocalizationProvider>
-            <TableComponent columns={columns} data={filteredTasks.map(task => {
-                return {
+            <Button
+                sx={{ marginLeft: 2 }}
+                variant="outlined"
+                onClick={() => setSelectedDate(null)}
+            >
+                Сбросить дату
+            </Button>
+            <TableComponent
+                columns={columns}
+                data={filteredTasks.map(task => ({
                     ...task,
-                };
-            })} />
+                    date: format(new Date(task.date), 'dd.MM.yyyy')
+                }))}
+            />
+
         </div>
     );
 };
