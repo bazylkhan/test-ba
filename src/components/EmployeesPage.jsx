@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchEmployees, selectAllEmployees } from '../features/employeesSlice';
 import TableComponent from './common/TableComponent';
 import ModalComponent from './common/ModalComponent';
-import { TextField, Box } from '@mui/material';
+import { TextField, Box, CircularProgress } from '@mui/material';
 
-function EmployeesPage({employees}) {
+function EmployeesPage() {
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [filterIIN, setFilterIIN] = useState('');
     const [filterFullName, setFilterFullName] = useState('');
     const [filterPhone, setFilterPhone] = useState('');
+
+    const dispatch = useDispatch();
+    const employees = useSelector(selectAllEmployees);
+    const loading = useSelector(state => state.employees.loading);
+
+
+    useEffect(() => {
+        dispatch(fetchEmployees());
+    }, [employees]);
 
     const handleOpenModal = (employee) => {
         setSelectedEmployee(employee);
@@ -30,6 +41,10 @@ function EmployeesPage({employees}) {
             employee.fullName.toLowerCase().includes(filterFullName.toLowerCase()) &&
             employee.phone.includes(filterPhone);
     });
+
+    if (loading) {
+        return <CircularProgress />;
+    }
 
     return (
         <div>

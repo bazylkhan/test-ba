@@ -1,6 +1,5 @@
-// ModalComponent.jsx
 import React from 'react';
-import { Modal, Box, Typography } from '@mui/material';
+import { Modal, Box } from '@mui/material';
 
 function ModalComponent({ open, onClose, children, size }) {
     return (

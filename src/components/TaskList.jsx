@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import TableComponent from './common/TableComponent';
-import {FormControl, InputLabel, Select, MenuItem, TextField, Button} from '@mui/material';
-import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import { FormControl, InputLabel, Select, MenuItem, TextField, Button } from '@mui/material';
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import format from 'date-fns/format';
+import {fetchTasks, selectAllTasks} from "../features/tasksSlice";
+import {selectAllEmployees} from "../features/employeesSlice";
 
+const TaskList = () => {
+    const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(fetchTasks());
+    }, [dispatch]);
 
-const TaskList = ({ tasks, employees }) => {
     const [filteredTasks, setFilteredTasks] = useState([]);
     const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
-
+    const tasks = useSelector(selectAllTasks);
+    const employees = useSelector(selectAllEmployees);
     const columns = [
         { id: 'description', label: 'Описание', minWidth: 170 },
         { id: 'date', label: 'Дата', minWidth: 120 },
     ];
-
 
     useEffect(() => {
         const filtered = tasks.filter(task => {
@@ -26,7 +33,6 @@ const TaskList = ({ tasks, employees }) => {
         });
         setFilteredTasks(filtered);
     }, [tasks, selectedEmployeeId, selectedDate]);
-
 
     return (
         <div>
@@ -70,7 +76,6 @@ const TaskList = ({ tasks, employees }) => {
                     date: format(new Date(task.date), 'dd.MM.yyyy')
                 }))}
             />
-
         </div>
     );
 };

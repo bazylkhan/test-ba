@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Select, MenuItem, Grid } from '@mui/material';
 import { getDaysInMonth } from './hooks/getDaysInMonth';
-import useEmployees from './hooks/useEmployees';
+import { fetchEmployees, selectAllEmployees } from '../features/employeesSlice';
 
-function CalendarPage( {employees} ) {
+function CalendarPage() {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+    const dispatch = useDispatch();
+    const employees = useSelector(selectAllEmployees);
+
+    useEffect(() => {
+        dispatch(fetchEmployees());
+    }, [dispatch]);
 
     const handleMonthChange = (event) => {
         setSelectedMonth(event.target.value);
@@ -17,7 +24,9 @@ function CalendarPage( {employees} ) {
         <Box>
             <Select value={selectedMonth} onChange={handleMonthChange}>
                 {Array.from({ length: 12 }, (_, index) => (
-                    <MenuItem key={index} value={index}>{new Date(0, index).toLocaleString('default', { month: 'long' })}</MenuItem>
+                    <MenuItem key={index} value={index}>
+                        {new Date(0, index).toLocaleString('default', { month: 'long' })}
+                    </MenuItem>
                 ))}
             </Select>
             <Grid container spacing={2}>

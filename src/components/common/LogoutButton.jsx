@@ -1,19 +1,19 @@
 import React from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import { Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../features/authSlice';
+import Button from '@mui/material/Button';
 
 const LogoutButton = () => {
-    const { logout } = useAuth();
-    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogout = () => {
-        logout();
-        navigate('/');
+        dispatch(logout());
     };
 
     return (
-        <Button color="inherit" onClick={handleLogout}>Выход</Button>
+        <Button color="inherit" onClick={handleLogout}>
+            Выйти
+        </Button>
     );
 };
 

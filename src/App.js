@@ -1,23 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
-import EmployeesPage from './components/Employees';
-import CalendarPage from './components/Calendar';
+import EmployeesPage from './components/EmployeesPage';
+import CalendarPage from './components/CalendarPage';
 import TaskListPage from './components/TaskList';
 import { Container } from '@mui/material';
-
-import useTaskList from './components/hooks/useTaskList';
-import useEmployees from './components/hooks/useEmployees';
-import {AuthProvider} from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 
 function App() {
-
-    const tasks = useTaskList();
-    const employees = useEmployees();
-
     return (
-        <AuthProvider>
             <Router>
                 <Header/>
                 <Container>
@@ -25,23 +16,22 @@ function App() {
                         <Route path="/" element={<LoginPage />} />
                         <Route path="/employees" element={
                             <PrivateRoute>
-                                <EmployeesPage employees={employees} />
+                                <EmployeesPage />
                             </PrivateRoute>
                         } />
                         <Route path="/calendar" element={
                             <PrivateRoute>
-                                <CalendarPage employees={employees} />
+                                <CalendarPage />
                             </PrivateRoute>
                         } />
                         <Route path="/taskList" element={
                             <PrivateRoute>
-                                <TaskListPage tasks={tasks} employees={employees}/>
+                                <TaskListPage />
                             </PrivateRoute>
                         } />
                     </Routes>
                 </Container>
             </Router>
-        </AuthProvider>
     );
 }
 

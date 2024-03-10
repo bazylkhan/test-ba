@@ -1,11 +1,16 @@
-import {AppBar, Button, Toolbar, Typography} from "@mui/material";
-import {Link as RouterLink} from "react-router-dom";
-import LogoutButton from "./common/LogoutButton";
-import {useAuth} from "../contexts/AuthContext";
-
+import { AppBar, Button, Toolbar, Typography } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../features/authSlice";
 
 function Header() {
-    const {isAuthenticated, userData} = useAuth()
+    const { isAuthenticated, userData } = useSelector(state => state.auth); // Здесь мы используем состояние из Redux
+    const dispatch = useDispatch();
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+
     return (
         <AppBar position="static">
             <Toolbar>
@@ -14,16 +19,15 @@ function Header() {
                 </Typography>
                 {isAuthenticated && (
                     <>
-                    <LogoutButton />
-                    <Button color="inherit" component={RouterLink} to="/employees">Сотрудники</Button>
-                    <Button color="inherit" component={RouterLink} to="/calendar">Календарь</Button>
-                    <Button color="inherit" component={RouterLink} to="/taskList">Список работ</Button>
+                        <Button onClick={handleLogout} color="inherit">Выйти</Button>
+                        <Button color="inherit" component={RouterLink} to="/employees">Сотрудники</Button>
+                        <Button color="inherit" component={RouterLink} to="/calendar">Календарь</Button>
+                        <Button color="inherit" component={RouterLink} to="/taskList">Список работ</Button>
                     </>
-                )
-                }
+                )}
             </Toolbar>
         </AppBar>
-    )
+    );
 }
 
-export default Header
+export default Header;
