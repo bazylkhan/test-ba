@@ -1,4 +1,3 @@
-// DropdownComponent.jsx
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput } from '@mui/material';
 
