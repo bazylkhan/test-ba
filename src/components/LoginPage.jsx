@@ -12,8 +12,8 @@ function LoginPage() {
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        if (username === 'admin' && password === 'password') {
-            login(); // Обновление состояния аутентификации
+        if (username === 'admin' && password === 'admin') {
+            login();
             navigate('/employees');
         } else {
             alert('Неверное имя пользователя или пароль');
