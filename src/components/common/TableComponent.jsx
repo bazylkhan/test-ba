@@ -60,7 +60,7 @@ function TableComponent({ columns, data }) {
                 variant="outlined"
                 shape="rounded"
                 color="primary"
-                sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}
+                sx={{ mt: 2, display: 'flex', justifyContent: 'center', paddingBottom: '16px', }}
             />
             <FormControl variant="standard" sx={{ m: 2, minWidth: 120, position: 'absolute', bottom: 0, right: 0 }}>
                 <InputLabel id="rows-per-page-label">Строк на странице</InputLabel>

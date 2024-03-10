@@ -15,10 +15,8 @@ const TaskList = ({ tasks, employees }) => {
         }
     }, [selectedEmployeeId, tasks]);
 
-    // Определение столбцов для TableComponent
     const columns = [
         { id: 'description', label: 'Описание' },
-        // Добавьте другие столбцы по необходимости
     ];
 
     return (
