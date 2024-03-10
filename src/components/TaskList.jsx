@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import TableComponent from './common/TableComponent';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {FormControl, InputLabel, Select, MenuItem, TextField} from '@mui/material';
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+
 
 const TaskList = ({ tasks, employees }) => {
     const [filteredTasks, setFilteredTasks] = useState([]);
     const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
-
-    useEffect(() => {
-        if (selectedEmployeeId) {
-            const filtered = tasks.filter(task => task.employeeId === selectedEmployeeId);
-            setFilteredTasks(filtered);
-        } else {
-            setFilteredTasks(tasks);
-        }
-    }, [selectedEmployeeId, tasks]);
+    const [selectedDate, setSelectedDate] = useState(null);
 
     const columns = [
         { id: 'description', label: 'Описание' },
     ];
+
+    useEffect(() => {
+        const filtered = tasks.filter(task => {
+            const matchEmployee = selectedEmployeeId ? task.employeeId === selectedEmployeeId : true;
+            const matchDate = selectedDate ? new Date(task.date).toDateString() === selectedDate.toDateString() : true;
+            return matchEmployee && matchDate;
+        });
+        setFilteredTasks(filtered);
+    }, [tasks, selectedEmployeeId, selectedDate]);
+
 
     return (
         <div>
@@ -37,6 +42,16 @@ const TaskList = ({ tasks, employees }) => {
                     ))}
                 </Select>
             </FormControl>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                    label="Filter by Date"
+                    value={selectedDate}
+                    onChange={(newValue) => {
+                        setSelectedDate(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                />
+            </LocalizationProvider>
             <TableComponent columns={columns} data={filteredTasks.map(task => {
                 return {
                     ...task,
