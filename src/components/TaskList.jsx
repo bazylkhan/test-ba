@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import useEmployees from "./hooks/useEmployees";
-import { FormControl, InputLabel, Select, MenuItem, List, ListItem, ListItemText } from '@mui/material';
+import TableComponent from './common/TableComponent';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const TaskList = ({ tasks, employees }) => {
     const [filteredTasks, setFilteredTasks] = useState([]);
@@ -8,22 +8,27 @@ const TaskList = ({ tasks, employees }) => {
 
     useEffect(() => {
         if (selectedEmployeeId) {
-            const filtered = tasks.filter(task => task.employeeId == selectedEmployeeId);
+            const filtered = tasks.filter(task => task.employeeId === selectedEmployeeId);
             setFilteredTasks(filtered);
         } else {
             setFilteredTasks(tasks);
         }
     }, [selectedEmployeeId, tasks]);
 
+    // Определение столбцов для TableComponent
+    const columns = [
+        { id: 'description', label: 'Описание' },
+        // Добавьте другие столбцы по необходимости
+    ];
+
     return (
         <div>
-            <FormControl fullWidth>
+            <FormControl fullWidth margin="normal">
                 <InputLabel id="employee-select-label">Сотрудник</InputLabel>
                 <Select
                     labelId="employee-select-label"
                     id="employee-select"
                     value={selectedEmployeeId}
-                    label="Сотрудник"
                     onChange={(e) => setSelectedEmployeeId(e.target.value)}
                 >
                     <MenuItem value="">
@@ -34,13 +39,11 @@ const TaskList = ({ tasks, employees }) => {
                     ))}
                 </Select>
             </FormControl>
-            <List>
-                {filteredTasks.map(task => (
-                    <ListItem key={task.id}>
-                        <ListItemText primary={task.description} />
-                    </ListItem>
-                ))}
-            </List>
+            <TableComponent columns={columns} data={filteredTasks.map(task => {
+                return {
+                    ...task,
+                };
+            })} />
         </div>
     );
 };

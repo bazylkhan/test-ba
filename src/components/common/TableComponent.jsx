@@ -1,35 +1,47 @@
-// TableComponent.jsx
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Pagination,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
+} from '@mui/material';
 
 function TableComponent({ columns, data }) {
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+    const handleChangePage = (event, value) => {
+        setPage(value);
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
+        setRowsPerPage(event.target.value);
+        setPage(1);
     };
 
     return (
-        <Paper>
+        <Paper sx={{ position: 'relative' }}>
             <TableContainer>
                 <Table>
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
                                 <TableCell key={column.id}>
-                                    {column.label}
+                                    <strong>{column.label}</strong>
                                 </TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                        {data.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((row) => (
                             <TableRow key={row.id}>
                                 {columns.map((column) => (
                                     <TableCell key={column.id}>
@@ -41,14 +53,29 @@ function TableComponent({ columns, data }) {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
-                component="div"
-                count={data.length}
-                rowsPerPage={rowsPerPage}
+            <Pagination
+                count={Math.ceil(data.length / rowsPerPage)}
                 page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
+                onChange={handleChangePage}
+                variant="outlined"
+                shape="rounded"
+                color="primary"
+                sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}
             />
+            <FormControl variant="standard" sx={{ m: 2, minWidth: 120, position: 'absolute', bottom: 0, right: 0 }}>
+                <InputLabel id="rows-per-page-label">Строк на странице</InputLabel>
+                <Select
+                    labelId="rows-per-page-label"
+                    id="rows-per-page"
+                    value={rowsPerPage}
+                    onChange={handleChangeRowsPerPage}
+                    label="Строк на странице"
+                >
+                    {[5, 10, 15, 20].map(pageSize => (
+                        <MenuItem key={pageSize} value={pageSize}>{pageSize}</MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
         </Paper>
     );
 }

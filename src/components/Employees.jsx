@@ -17,8 +17,6 @@ function EmployeesPage({employees}) {
 
     const columns = [
         { id: 'fullName', label: 'ФИО' },
-        { id: 'iin', label: 'ИИН' },
-        { id: 'phone', label: 'Телефон' },
     ];
 
     return (

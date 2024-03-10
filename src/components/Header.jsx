@@ -15,9 +15,9 @@ function Header() {
                 {isAuthenticated && (
                     <>
                     <LogoutButton />
-                    <Button color="inherit" component={RouterLink} to="/employees">Employees</Button>
-                    <Button color="inherit" component={RouterLink} to="/calendar">Calendar</Button>
-                    <Button color="inherit" component={RouterLink} to="/taskList">Task List</Button>
+                    <Button color="inherit" component={RouterLink} to="/employees">Сотрудники</Button>
+                    <Button color="inherit" component={RouterLink} to="/calendar">Календарь</Button>
+                    <Button color="inherit" component={RouterLink} to="/taskList">Список работ</Button>
                     </>
                 )
                 }
