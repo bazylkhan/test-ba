@@ -5,12 +5,12 @@ import {useAuth} from "../contexts/AuthContext";
 
 
 function Header() {
-    const {isAuthenticated} = useAuth()
+    const {isAuthenticated, userData} = useAuth()
     return (
         <AppBar position="static">
             <Toolbar>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    admin
+                    {userData ? userData.fullName : ''}
                 </Typography>
                 {isAuthenticated && (
                     <>

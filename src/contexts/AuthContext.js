@@ -6,12 +6,16 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userData, setUserData] = useState(null);
 
-    const login = () => setIsAuthenticated(true);
+    const login = (user) => {
+        setUserData(user)
+        setIsAuthenticated(true)
+    };
     const logout = () => setIsAuthenticated(false);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, userData, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

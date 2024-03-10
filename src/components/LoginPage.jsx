@@ -11,14 +11,22 @@ function LoginPage() {
     const { login } = useAuth(); // Использование функции login из контекста
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        if (username === 'admin' && password === 'admin') {
-            login();
-            navigate('/employees');
+    const handleLogin = async () => {
+        // Предположим, что 'users' - это результат запроса к API, возвращающего список сотрудников
+        const response = await fetch('http://localhost:3001/employees');
+        const users = await response.json();
+
+        const user = users.find(user => user.userLogin === username && user.password === password);
+
+        if (user) {
+            login(user); // Используйте функцию login с данными пользователя
+            navigate('/employees'); // Перенаправление на главную страницу после успешного входа
         } else {
-            alert('Неверное имя пользователя или пароль');
+            // Обработка ошибки логина
+            alert('Неверный логин или пароль');
         }
     };
+
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="100vh">
