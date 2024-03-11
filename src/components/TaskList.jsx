@@ -5,7 +5,7 @@ import { FormControl, InputLabel, Select, MenuItem, TextField, Button } from '@m
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import format from 'date-fns/format';
-import {addTask, fetchTasks, selectAllTasks} from "../features/tasksSlice";
+import {addNewTask, addTask, fetchTasks, selectAllTasks} from "../features/tasksSlice";
 import {selectAllEmployees} from "../features/employeesSlice";
 import ModalComponent from "./common/ModalComponent";
 
@@ -53,7 +53,7 @@ const TaskList = () => {
             employeeId: user.id,
             date: new Date().toISOString()
         };
-        dispatch(addTask(newTask));
+        dispatch(addNewTask(newTask));
         setIsModalOpen(false);
     };
 
