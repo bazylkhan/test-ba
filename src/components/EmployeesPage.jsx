@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchEmployees, selectAllEmployees } from '../features/employeesSlice';
 import TableComponent from './common/TableComponent';
 import ModalComponent from './common/ModalComponent';
-import { TextField, Box, CircularProgress } from '@mui/material';
+import {TextField, Box, CircularProgress, Typography, CardContent, Card, Grid, Divider} from '@mui/material';
 
 function EmployeesPage() {
     const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -71,9 +71,32 @@ function EmployeesPage() {
             <TableComponent columns={columns} data={filteredEmployees} onRowClick={handleOpenModal} />
             {selectedEmployee && (
                 <ModalComponent open={modalOpen} onClose={handleCloseModal}>
-                    <h2>{selectedEmployee.fullName}</h2>
+                    <div>
+                        <Typography variant="h5" component="div" gutterBottom>
+                            Сотрудник: {selectedEmployee.fullName}
+                        </Typography>
+                        <Divider variant="middle" sx={{ my: 2 }} />
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Typography variant="body1">ИИН: {selectedEmployee.iin}</Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="body1">Телефон: {selectedEmployee.phone}</Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="body1">Почта: {selectedEmployee.email}</Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="body1">Адрес: {selectedEmployee.address}</Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="body1">День рождения: {selectedEmployee.birthdate}</Typography>
+                            </Grid>
+                        </Grid>
+                    </div>
                 </ModalComponent>
             )}
+
         </div>
     );
 }

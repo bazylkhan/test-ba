@@ -14,7 +14,7 @@ import {
     MenuItem
 } from '@mui/material';
 
-function TableComponent({ columns, data }) {
+function TableComponent({ columns, data, onRowClick }) {
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -42,7 +42,10 @@ function TableComponent({ columns, data }) {
                     </TableHead>
                     <TableBody>
                         {data.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((row, idx) => (
-                            <TableRow key={idx}>
+                            <TableRow
+                                key={idx}
+                                onClick={() => onRowClick(row)}
+                            >
                                 {columns.map((column) => (
                                     <TableCell key={column.id}>
                                         {row[column.id]}
