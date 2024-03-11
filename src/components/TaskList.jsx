@@ -5,8 +5,9 @@ import { FormControl, InputLabel, Select, MenuItem, TextField, Button } from '@m
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import format from 'date-fns/format';
-import {fetchTasks, selectAllTasks} from "../features/tasksSlice";
+import {addTask, fetchTasks, selectAllTasks} from "../features/tasksSlice";
 import {selectAllEmployees} from "../features/employeesSlice";
+import ModalComponent from "./common/ModalComponent";
 
 const TaskList = () => {
     const dispatch = useDispatch();
@@ -15,11 +16,15 @@ const TaskList = () => {
         dispatch(fetchTasks());
     }, [dispatch]);
 
+    const user = useSelector(state => state.auth.userData);
     const [filteredTasks, setFilteredTasks] = useState([]);
     const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
     const tasks = useSelector(selectAllTasks);
     const employees = useSelector(selectAllEmployees);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [taskDescription, setTaskDescription] = useState('');
+
     const columns = [
         { id: 'description', label: 'Описание', minWidth: 170 },
         { id: 'date', label: 'Дата', minWidth: 120 },
@@ -33,6 +38,41 @@ const TaskList = () => {
         });
         setFilteredTasks(filtered);
     }, [tasks, selectedEmployeeId, selectedDate]);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleSaveTask = () => {
+        const newTask = {
+            description: taskDescription,
+            employeeId: user.id,
+            date: new Date().toISOString()
+        };
+        dispatch(addTask(newTask));
+        setIsModalOpen(false);
+    };
+
+    const renderModalContent = () => (
+        <>
+            <TextField
+                autoFocus
+                margin="dense"
+                id="taskDescription"
+                label="Описание работы"
+                type="text"
+                fullWidth
+                variant="outlined"
+                value={taskDescription}
+                onChange={(e) => setTaskDescription(e.target.value)}
+            />
+            <Button variant="contained" onClick={handleSaveTask}>Добавить работу</Button>
+        </>
+    );
 
     return (
         <div>
@@ -52,6 +92,13 @@ const TaskList = () => {
                     ))}
                 </Select>
             </FormControl>
+            <ModalComponent
+                open={isModalOpen}
+                onClose={handleCloseModal}
+                title="Добавить работу"
+                onSave={handleSaveTask}
+                children={renderModalContent()}
+            />
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                     label="Filter by Date"
@@ -69,6 +116,7 @@ const TaskList = () => {
             >
                 Сбросить дату
             </Button>
+            <Button sx={{ marginLeft: 2 }} variant="contained" onClick={handleOpenModal}>Добавить работу</Button>
             <TableComponent
                 columns={columns}
                 data={filteredTasks.map(task => ({

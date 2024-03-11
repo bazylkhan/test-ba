@@ -41,8 +41,8 @@ function TableComponent({ columns, data }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((row) => (
-                            <TableRow key={row.id}>
+                        {data.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((row, idx) => (
+                            <TableRow key={idx}>
                                 {columns.map((column) => (
                                     <TableCell key={column.id}>
                                         {row[column.id]}
